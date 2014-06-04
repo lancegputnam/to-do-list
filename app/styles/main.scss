@@ -12,15 +12,20 @@ body {
     font-size: 60px;
     margin-bottom: 10px;
     margin-top: 15px;
+    text-align:center;
 }
 
 .toDoBox {
-    width: 1000px;
+    width: 570px;
     height: 600px;
     background-color: white;
     border-radius: 10px;
     margin-top: 40px;
-    margin-left: 200px;
+    margin-left: 426px;
+}
+
+.header {
+    text-align: center;
 }
 
 .button {
@@ -53,26 +58,41 @@ body {
     }
 
     &:active {
+    position: relative;
     border-top-color: #0e354d;
     background: #0e354d;
     }
 }
 
-.save-button {
-    float: right;
-    margin-top: 2px;
-    margin-right: 10px;
+.messagecontainer {
+    margin-top: 10px;
+    width: 600px;
 }
 
-.edit-button {
-    float: right;
-    margin-right: 10px;
-    margin-top: 2px;
+.messagecontainer .taskName {
+    display: inline-block;
+    width: 400px;
+    margin-left: 10px;
+    margin-top: 10px;
 }
+
+
+// .save-button {
+//     float: right;
+//     margin-top: 2px;
+//     margin-right: 10px;
+// }
+
+// .edit-button {
+//     float: right;
+//     margin-right: 10px;
+//     margin-top: 2px;
+// }
  
-.delete-button {
-    float: right;
-    margin-right: 10px;
-    margin-top: 2px;
-    color: white;
-}
+// .delete-button {
+//     float:right;
+//     margin-right: 10px;
+//     margin-top: 2px;
+//     color: white;
+// }
+

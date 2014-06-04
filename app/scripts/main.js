@@ -1,26 +1,26 @@
-'use strict';
+"use script";
 
-// Backbone Model Constructor 
-Task = Backbone.Model.extend({ 
+// this defines the Backbone Model Constructor 
+var Task = Backbone.Model.extend({ 
     idAttribute: '_id'
 });
- 
-TaskCollection = Backbone.Collection.extend({
+
+//This defines the backbone Collection server
+var TaskCollection = Backbone.Collection.extend({
     model: Task,
     url: 'http://tiny-pizza-server.herokuapp.com/collections/todo-lance',
 });
  
- 
-TaskView = Backbone.View.extend({
+// this defines the Backbone View constructor
+var TaskView = Backbone.View.extend({
  
     template: _.template($('.task-list-item').text()),
     editTemplate: _.template($('.task-list-edit-item').text()),
  
     events: {
-        'click .edit-button'    : 'showEdit',
-        'click .save-button'    : 'saveChanges',
-        'click .delete-button'  : 'destroy',
-        'keydown input'         : 'checkForChanges'
+        'click .complete-button'    : 'showEdit',
+        'click .save-button'        : 'saveChanges',
+        'keydown input'             : 'checkForChanges'
  
     },
  
@@ -35,21 +35,18 @@ TaskView = Backbone.View.extend({
         var renderedTemplate = this.template(this.model.attributes);
         this.$el.html(renderedTemplate);
     },
- 
+    
+    // this is for the complete button, which destroys the item
     showEdit: function(){
-        var renderedTemplate = this.editTemplate(this.model.attributes);
-        this.$el.html(renderedTemplate);
+       this.model.destroy();
+       this.remove();
     },
- 
+    
+    // this is for the save button, which should save item to console
     saveChanges: function(){
         var nameVal = this.$el.find('.taskName input').val();
         this.model.set('task', nameVal);
         this.model.save();
-    },
- 
-    destroy: function(){
-        this.model.destroy();
-        this.remove();
     },
  
     checkForChanges: function(){
@@ -61,42 +58,64 @@ TaskView = Backbone.View.extend({
     }
 });
 
+
 //Create a new collection instance
 var addTask = new TaskCollection();
+console.log(addTask)
 
-//this function takes the arguments and posts it to the server/url below 
-function updatedTaskList(taskList) {
-    $.post('http://tiny-pizza-server.herokuapp.com/collections/todo-lance', taskList);
-}
-
-// //when the new task button is clicked, it creates an instance of the constructor
-$('.newTaskButton').click(function () {
-    //give the text in the todo-input field a name so it can be used in a chain
-    var theTask = $('.newItem').val();
-    //clears the input box
-    $('.newItem').val('');
-    //this will add  input value to the instance
-    newTask = addTask.add({taskText: theTask});
-    //the will save the input value to the server
-    newTask.save();        
-    //creates a new view instance with the above collection
-    new TaskView({model: newTask});
-
-    var outgoing = new Task();
-    updateTaskList(outgoing);
+// this fetches the addTask collection 
+var cool = addTask.fetch().done(function() {
+    // this for eaches over the model instnace arrays 
+  addTask.each(function(task) {
+    // this creates a new task view
+    new TaskView({
+      model: task
+    });
+  });
 });
 
+console.log(cool)
 
-// //when the new task button is clicked, it creates an instance of the constructor
-// $('.newTaskButton').click(function() {
-
-//     var task = $('.newItem').val();
-//     $('.newItem').val('');
-
-//     //this variable creates a new outgoing instance
-//     var outgoing = new Task();
-
-//     updateTaskList(outgoing);
-
+// this gives functionality to the add new task button 
+$('.newTaskButton').click(function(){
+    var inputVal = $('.newItem').val();
+    // this adds the input value to the collection instance 
+    var newUserInstance = addTask.add({name: inputVal})
+    // this saves the input value to the server 
+    newUserInstance.save();
+    // this clears the value of the new item input 
+    $('.newItem').val('');
+    new TaskView({model: newUserInstance});
+});
+ 
+// this renders 
+// var AppView = Backbone.View.extend({
+ 
+//   initialize: function(){
+//     this.listenTo(coolUsers, 'add', function(task){
+//       new TaskView({model: task})
+//     })
+//   }
+ 
 // });
+ 
+// // create instances
+ 
+// var coolUsers = new TaskCollection();
+// // console.log(coolUsers)
+ 
+// var app = new AppView();
+ 
+// coolUsers.fetch();
+
+
+
+
+
+
+
+
+
+
+
 
